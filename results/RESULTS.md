@@ -29,17 +29,52 @@ All four inverters end up supplying almost the same amount of power and
 running at almost the same frequency — meaning they're genuinely sharing the
 load between them, not just each doing their own thing.
 
-## Steady-state numbers
+## Numbers at the end of the short (0.4 second) run
 
-| Inverter | Peak voltage | Frequency range | Power at the end | Reactive power at the end |
+| Inverter | Peak voltage | Frequency range | Power at t=0.4s | Reactive power at t=0.4s |
 |---|---|---|---|---|
 | DG1 | 21.1 V | 59.946–60.000 Hz | 35.9 W | 3.8 VAr |
 | DG2 | 21.1 V | 59.946–60.000 Hz | 36.3 W | 3.3 VAr |
 | DG3 | 21.1 V | 59.945–60.000 Hz | 36.6 W | 5.0 VAr |
 | DG4 | 21.1 V | 59.946–60.000 Hz | 36.4 W | 8.7 VAr |
 
-Stable the whole time, no errors or blow-ups. All four inverters land within
-about half a watt of each other — that's the load-sharing working correctly.
+Stable the whole time, no errors or blow-ups, and all four inverters land
+within about half a watt of each other. **But as the longer run below shows,
+0.4 seconds isn't actually long enough for the power to finish settling** —
+these numbers are still partway up the climb, not the true final value.
+
+## Checking real steady state with a much longer run (20 seconds)
+
+A 20-second run (sped up using Simulink's Accelerator mode — this compiles
+the model to run faster, it does **not** change the simulation itself or its
+accuracy, just how quickly MATLAB computes it) shows what actually happens
+once everything has fully settled:
+
+![Per-DG active/reactive power, 20 seconds](power_longrun.png)
+![Per-DG frequency, 20 seconds](frequency_longrun.png)
+
+Power actually keeps climbing past the 0.4s mark and doesn't fully settle
+until around **t = 1.5–2 seconds**, landing at roughly **42 W per inverter**
+(not the ~36 W seen at t=0.4s) — and then stays completely flat for the
+remaining 18+ seconds. Frequency behaves the same way, settling to about
+**59.937 Hz** and holding there. The bottom panel of the frequency plot zooms
+into just the last 2 seconds (t=18–20s): it looks "noisy," but look at the
+scale on the left — that's a window of only **0.0001 Hz**. That's just tiny
+background measurement noise, not any real instability; the actual value is
+rock-steady.
+
+**In the last 1 second of the run, every inverter is this close to identical:**
+
+| Inverter | Power range | Reactive power | Frequency range |
+|---|---|---|---|
+| DG1 | 41.99–42.04 W | 3.52–3.55 VAr | 59.93695–59.93702 Hz |
+| DG2 | 41.98–42.04 W | 3.28–3.32 VAr | 59.93695–59.93703 Hz |
+| DG3 | 41.99–42.03 W | 5.56–5.59 VAr | 59.93695–59.93702 Hz |
+| DG4 | 41.99–42.04 W | 10.09–10.12 VAr | 59.93694–59.93702 Hz |
+
+All four inverters land on essentially the same power and the exact same
+frequency — this is the clearest confirmation that the load-sharing is
+genuinely working, not just stable in the short term.
 
 ## Using the real hardware numbers
 
