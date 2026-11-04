@@ -56,6 +56,28 @@ one also powers its own local load. One of the loads (Load 4.2) can be
 switched on partway through the simulation, so you can see how the system
 reacts when the load suddenly changes.
 
+Here's what the actual Simulink model looks like:
+
+![The Simulink model](results/model_structure.png)
+
+## What I actually did
+
+- Built the whole electrical circuit in Simulink from scratch: 4 inverters,
+  filters, cables, loads, and a simple controller for each inverter.
+- Got it running and tested it, including switching on a load partway through
+  to see how the system reacts.
+- Found and fixed two real problems along the way:
+  1. The inverters were fighting each other instead of sharing the load
+     properly, because of how the connecting cables behave electrically.
+  2. The current waveform was noisier than expected — traced down to an
+     unwanted "ringing" in each inverter's filter, fixed with a small
+     feedback trick.
+- Found the original hardware project this is based on, and swapped in its
+  real cable/load values in place of my own early guesses.
+- Checked the result over a much longer run (20 simulated seconds, not just a
+  split second) to make sure it actually settles down and stays stable, not
+  just looking okay for a moment.
+
 ## The model file
 
 - **`model/microgrid_4dg.slx`** — the Simulink model. Built in MATLAB R2025a
