@@ -60,8 +60,6 @@ reacts when the load suddenly changes.
 
 - **`model/microgrid_4dg.slx`** — the Simulink model. Built in MATLAB R2025a
   with the Specialized Power Systems library (`sps_lib`).
-- This file is edited by hand directly in Simulink (it isn't auto-generated
-  by a script), so it's the one real copy to open and look at.
 
 ## Results
 
