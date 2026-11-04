@@ -1,0 +1,11 @@
+# Local build/verify tooling and working notes — not part of the published
+# model+results. Kept on disk locally; deliberately excluded from git.
+/scripts/
+/dev/
+
+# Simulink/MATLAB generated junk, in case it ever reappears at the root.
+slprj/
+*.slxc
+*.autosave
+*.asv
+.DS_Store
