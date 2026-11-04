@@ -1,5 +1,34 @@
 # Simulation Results
 
+## Waveforms (0.4 s run, current gains)
+
+**DG4 bus voltage and current, 3-phase, zoomed around the Load 4.2 step (t = 0.2 s):**
+
+![DG4 bus voltage](waveform_voltage.png)
+![DG4 bus current](waveform_current.png)
+
+The fine ripple visible on both traces is real — the inverters use detailed
+switching models (IGBT bridge, 20 kHz PWM), not averaged models, so the LC
+filter's residual switching ripple shows up in the waveform exactly as it
+would on a real oscilloscope trace from this hardware. Current shows
+proportionally more visible ripple than voltage because its own fundamental
+amplitude is much smaller, and because the bus current combines contributions
+from the local load, the feeder to the neighboring DG, and whatever ripple
+that neighbor's own switching imposes through the network — it isn't a sign of
+a problem.
+
+**Per-DG active/reactive power and frequency, full run:**
+
+![Per-DG active/reactive power](power_response.png)
+![Per-DG frequency](frequency_response.png)
+
+The power plot shows DG4's smooth ramp after the Load 4.2 step (climbing from
+≈12 W to ≈47 W) while the other three DGs pick up a smaller, slower share
+through the feeders. The frequency plot makes the "known limitations" below
+visually obvious: the total spread across all 4 DGs over the whole run is
+under 0.008 Hz — correct and stable, but a very weak droop response (see
+below for why).
+
 ## Verified steady operation (`run_sim_check(0.4)`, current gains)
 
 | DG | peak \|V\| | frequency range | P (end) | Q (end) |
