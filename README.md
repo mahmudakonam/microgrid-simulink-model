@@ -17,25 +17,44 @@ SCADA software from the original project.
 
 ![Microgrid diagram](image.png)
 
+## What is a microgrid?
+
+Normally, electricity comes from one big power plant, through long power
+lines, to your home or building. A **microgrid** is a small, local version of
+that idea — a handful of power sources working together to supply electricity
+to a small area, like a lab, a campus, or a neighborhood. A microgrid can run
+connected to the main power grid, or completely on its own ("islanded").
+
+## How does this one work?
+
+This project has **4 small power sources** (called DG1–DG4, short for
+"distributed generators"). Each one is an inverter — a device that turns DC
+power (like from a battery or solar panel) into the AC power that normal
+electrical equipment uses. The 4 inverters are wired together with cables, and
+each one also has its own electrical load (something that uses power,
+represented here by resistors).
+
+The interesting part is *how the 4 inverters cooperate*. There's no central
+computer telling them what to do. Instead, each inverter constantly watches
+how much power it's putting out. If it's working harder than the others, it
+automatically lowers its own voltage and frequency by a tiny amount — just
+enough that some of its load naturally shifts over to the other inverters.
+This way, all four end up sharing the total demand fairly, just by each one
+reacting to its own output. This technique is called **droop control**, and
+it's the standard approach used in real microgrids for exactly this reason.
+
 ## What's in the model
 
-Four small power sources ("DG1" to "DG4"), each one built the same way:
+Each of the 4 sources (DG1–DG4) is built the same way:
 
 ```
 DC source → Inverter → Filter → Connection point → On/off switch (relay)
 ```
 
-The four sources are connected to each other through cables (called
-"feeders"), and each one also powers its own local load. One of the loads
-(Load 4.2) can be switched on partway through the simulation, so you can see
-how the system reacts when the load suddenly changes.
-
-Each inverter has its own simple controller. There is no single "boss"
-controller telling everyone what to do — instead, every inverter looks at how
-much power it is supplying and adjusts its own voltage and frequency a tiny
-bit in response. This is called **droop control**, and it's the standard way
-to let several power sources share a load fairly without needing to talk to
-each other constantly.
+They're connected to each other through cables (called "feeders"), and each
+one also powers its own local load. One of the loads (Load 4.2) can be
+switched on partway through the simulation, so you can see how the system
+reacts when the load suddenly changes.
 
 ## The model file
 
